@@ -20,7 +20,6 @@ const App = () => {
   } 
 
 
-
   const handleCheck = (id) => {
     const listItems = todos.map((todo) => id === todo.id ? { ...todo, checked: !todo.checked} : todo )
    setAndSave(listItems)
@@ -39,6 +38,12 @@ const App = () => {
     setNewTodo('')
   }
 
+
+  const handleDelete = (id) => {
+    const listItems = todos.filter((todo) => id !== todo.id )
+    setAndSave(listItems)
+  }
+
   return (
     <div>
       <h1>List of Todos</h1>
@@ -51,6 +56,7 @@ const App = () => {
         <Content 
           todos={todos} 
           handleCheck={handleCheck}
+          handleDelete={handleDelete}
           />        
       </main>
     </div>
