@@ -1,25 +1,65 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react"
+import Content from "./Content"
+import AddTodo from "./AddTodo"
 
-function App() {
+
+
+const App = () => {
+
+  const [ newTodo, setNewTodo ] = useState('')
+  
+  const [ todos, setTodos ] = useState([
+    { id: 1, todo: 'run', checked: false },
+    { id: 2, todo: 'jump', checked: false },
+    { id: 3, todo: 'walk', checked: false }
+  ])
+
+  const setAndSave = (newTodos) => {
+    setTodos(newTodos)
+    localStorage.setItem('mytodolist', JSON.stringify(newTodos))
+  } 
+
+
+
+  const handleCheck = (id) => {
+    const listItems = todos.map((todo) => id === todo.id ? { ...todo, checked: !todo.checked} : todo )
+   setAndSave(listItems)
+ }
+
+  const handleAddTodo = (todo) => {
+    const id = todos[todos.length - 1].id + 1
+    const newTodo = { todo, id, 'checked': false}
+    const newTodos = [...todos, newTodo]
+    setAndSave(newTodos)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    handleAddTodo(newTodo)
+    setNewTodo('')
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>List of Todos</h1>
+      <main>
+        <AddTodo 
+          handleSubmit={handleSubmit} 
+          newTodo={newTodo} 
+          setNewTodo={setNewTodo}
+          />
+        <Content 
+          todos={todos} 
+          handleCheck={handleCheck}
+          />        
+      </main>
     </div>
-  );
+  )
 }
 
-export default App;
+
+
+
+
+export default App
+
